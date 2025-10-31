@@ -1,0 +1,44 @@
+# === Terraform ===
+# Local .terraform directories
+.terraform/
+.terraform.lock.hcl
+
+# Terraform state files (contain credentials & resource IDs)
+terraform.tfstate
+terraform.tfstate.backup
+
+# Crash logs
+crash.log
+crash.*.log
+
+# Override files (for local testing)
+override.tf
+override.tf.json
+*_override.tf
+*_override.tf.json
+
+# Sensitive variable files
+*.tfvars
+*.tfvars.json
+
+# Plan output files
+*.plan
+
+# === macOS system files ===
+.DS_Store
+.AppleDouble
+.LSOverride
+
+# === Logs ===
+*.log
+
+# === Python virtual environments (if you run scripts on the VM locally) ===
+venv/
+.env/
+__pycache__/
+*.pyc
+
+# === Misc ===
+.idea/
+.vscode/
+*.swp
