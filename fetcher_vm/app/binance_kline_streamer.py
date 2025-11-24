@@ -3,10 +3,18 @@ import json
 import websockets
 from datetime import datetime
 
+from google.cloud import pubsub_v1
+
 SYMBOL = "btcusdc"
-INTERVAL = "1m"
+INTERVAL = "5m"
 STREAM_URL = f"wss://stream.binance.com:9443/ws/{SYMBOL}@kline_{INTERVAL}"
 LOG_FILE = "/var/log/kline/kline.log"
+
+PROJECT_ID = "mineral-brand-231612"
+TOPIC_ID = "binance-klines"
+
+publisher = pubsub_v1.PublisherClient()
+TOPIC_PATH = publisher.topic_path(PROJECT_ID, TOPIC_ID)
 
 async def main():
     with open(LOG_FILE, "a", buffering=1) as log:
@@ -26,7 +34,19 @@ async def main():
                     if not kline:
                         continue
                     if kline.get("x"):  # closed candle
-                        log_print("Kline closed:", json.dumps(kline))
+                        serialized = json.dumps(kline)
+                        log_print("Kline closed:", serialized)
+
+                        # Publish to Pub/Sub
+                        future = publisher.publish(
+                            TOPIC_PATH,
+                            serialized.encode("utf-8"),
+                            symbol=SYMBOL,
+                            interval=INTERVAL
+                        )
+                        # optional: wait for ack to see errors
+                        future.result(timeout=10)
+                        log_print("Published to Pub/Sub:", TOPIC_PATH)
                 except Exception as e:
                     log_print("Error:", e)
                     await asyncio.sleep(5)

@@ -9,8 +9,7 @@ terraform {
 }
 
 provider "google" {
-  project = "mineral-brand-231612"
-  region  = "europe-west1"
-  zone    = "europe-west1-d"
-  # credentials are picked up from ADC by default (see step 3)
+  project = var.project_id
+  region  = var.region
+  zone    = var.zone
 }

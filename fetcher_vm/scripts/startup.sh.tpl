@@ -3,8 +3,19 @@ set -euxo pipefail
 export DEBIAN_FRONTEND=noninteractive
 
 # ===== SYSTEM SETUP =====
-apt-get update -y
-apt-get install -y python3 python3-venv python3-pip
+retry_apt() {
+  for i in {1..10}; do
+    if apt-get update -y && apt-get install -y python3 python3-venv python3-pip; then
+      return 0
+    fi
+    echo "apt-get is locked or failed, retrying in 10s... ($i/10)"
+    sleep 10
+  done
+  echo "apt-get failed after multiple retries"
+  exit 1
+}
+
+retry_apt
 
 # ===== CREATE APP USER AND DIRECTORIES =====
 adduser --system --group --home /opt/kline kline || true
@@ -25,9 +36,14 @@ sudo -u kline bash -lc '
   . .venv/bin/activate
   python -m pip install --upgrade pip
   python -m pip install websockets
-  # Sanity check: import must succeed
+  python -m pip install google-cloud-pubsub
+  # Sanity check: imports must succeed
   python - <<PY
-import websockets; print("websockets OK", websockets.__version__)
+import websockets
+print("websockets OK", websockets.__version__)
+
+from google.cloud import pubsub_v1
+print("google-cloud-pubsub OK")
 PY
 '
 
