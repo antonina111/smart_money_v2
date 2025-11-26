@@ -1,5 +1,6 @@
 import asyncio
 import json
+import os
 import websockets
 from datetime import datetime
 
@@ -10,10 +11,16 @@ INTERVAL = "5m"
 STREAM_URL = f"wss://stream.binance.com:9443/ws/{SYMBOL}@kline_{INTERVAL}"
 LOG_FILE = "/var/log/kline/kline.log"
 
-PROJECT_ID = "mineral-brand-231612"
-TOPIC_ID = "binance-klines"
+PROJECT_ID = os.getenv("PROJECT_ID")
+TOPIC_ID = os.getenv("TOPIC_ID")
 
 publisher = pubsub_v1.PublisherClient()
+
+if not PROJECT_ID:
+    raise RuntimeError("PROJECT_ID environment variable is not set")
+if not TOPIC_ID:
+    raise RuntimeError("TOPIC_ID environment variable is not set")
+
 TOPIC_PATH = publisher.topic_path(PROJECT_ID, TOPIC_ID)
 
 async def main():

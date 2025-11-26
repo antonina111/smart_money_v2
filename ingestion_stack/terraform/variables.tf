@@ -27,3 +27,9 @@ variable "machine_type" {
   description = "Machine type for the compute instance"
   default     = "e2-micro"
 }
+
+variable "pubsub_topic" {
+  type        = string
+  description = "Pub/Sub topic for raw market kline data"
+  default     = "market-klines-raw"
+}

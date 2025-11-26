@@ -47,6 +47,12 @@ print("google-cloud-pubsub OK")
 PY
 '
 
+# ===== APP CONFIG (ENV VARS FOR PYTHON) =====
+cat >/etc/default/kline <<EOF
+PROJECT_ID="${project_id}"
+TOPIC_ID="${topic_id}"
+EOF
+
 # ===== SYSTEMD UNIT =====
 cat >/etc/systemd/system/kline.service <<'UNIT'
 [Unit]

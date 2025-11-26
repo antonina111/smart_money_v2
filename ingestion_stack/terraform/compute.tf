@@ -35,6 +35,8 @@ resource "google_compute_instance" "vm-fetcher-2-0" {
     enable-osconfig = "TRUE"
     startup-script  = templatefile("${path.module}/../scripts/startup.sh.tpl", {
       streamer_py = local.streamer_py
+      project_id  = var.project_id
+      topic_id    = var.pubsub_topic
     })
   }
 
