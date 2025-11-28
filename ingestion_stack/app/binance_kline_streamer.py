@@ -7,7 +7,7 @@ from datetime import datetime
 from google.cloud import pubsub_v1
 
 SYMBOL = "btcusdc"
-INTERVAL = "5m"
+INTERVAL = "1h"
 STREAM_URL = f"wss://stream.binance.com:9443/ws/{SYMBOL}@kline_{INTERVAL}"
 LOG_FILE = "/var/log/kline/kline.log"
 
