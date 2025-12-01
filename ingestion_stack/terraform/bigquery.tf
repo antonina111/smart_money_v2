@@ -1,9 +1,20 @@
+# Datasets
+
 resource "google_bigquery_dataset" "raw" {
   project      = var.project_id
   dataset_id   = "raw"
   description  = "Raw layer for ingested market data"
   location     = var.region
 }
+
+resource "google_bigquery_dataset" "curated" {
+  project      = var.project_id
+  dataset_id   = "curated"
+  description  = "Curated layer for ingested market data"
+  location     = var.region
+}
+
+# Tables
 
 resource "google_bigquery_table" "raw_market_klines" {
   project    = var.project_id
@@ -47,3 +58,26 @@ resource "google_bigquery_table" "raw_market_klines" {
     }
   ])
 }
+
+# Scheduled quey
+resource "google_bigquery_data_transfer_config" "raw_to_curated" {
+  project                = var.project_id
+  display_name           = "raw_to_curated_hourly"
+  location               = var.region
+  data_source_id         = "scheduled_query"
+  destination_dataset_id = google_bigquery_dataset.curated.dataset_id
+  schedule = "every 1 hours"
+  schedule_options {
+    start_time = "2025-12-01T17:01:00Z"
+  }
+  service_account_name = google_service_account.bq_schedule_sa.email
+
+  params = {
+    destination_table_name_template = "market_klines"
+
+    write_disposition = "WRITE_TRUNCATE"
+
+    query = file("${path.module}/../app/raw_to_curated.sql")
+  }
+}
+

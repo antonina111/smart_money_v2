@@ -19,3 +19,26 @@ resource "google_bigquery_dataset_iam_member" "raw_pubsub_writer" {
 
   member = "serviceAccount:service-${data.google_project.current.number}@gcp-sa-pubsub.iam.gserviceaccount.com"
 }
+
+resource "google_service_account" "bq_schedule_sa" {
+  account_id   = "bq-scheduled-query"
+  display_name = "BQ Scheduled Query Runner"
+}
+
+resource "google_project_iam_member" "bq_scheduled_query_user" {
+  project = var.project_id
+  role    = "roles/bigquery.user"
+  member  = "serviceAccount:${google_service_account.bq_schedule_sa.email}"
+}
+
+resource "google_bigquery_dataset_iam_member" "bq_scheduled_query_source" {
+  dataset_id = google_bigquery_dataset.raw.dataset_id
+  role       = "roles/bigquery.dataViewer"
+  member     = "serviceAccount:${google_service_account.bq_schedule_sa.email}"
+}
+
+resource "google_bigquery_dataset_iam_member" "bq_scheduled_query_dest" {
+  dataset_id = google_bigquery_dataset.curated.dataset_id
+  role       = "roles/bigquery.dataEditor"
+  member     = "serviceAccount:${google_service_account.bq_schedule_sa.email}"
+}
