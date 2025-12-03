@@ -49,6 +49,9 @@ async def main():
                             TOPIC_PATH,
                             serialized.encode("utf-8"),
                             symbol=SYMBOL,
+                            ingestion_type='websocket',
+                            source_type='cryptocurrency_exchange',
+                            source_name='binance',
                             interval=INTERVAL
                         )
                         # optional: wait for ack to see errors

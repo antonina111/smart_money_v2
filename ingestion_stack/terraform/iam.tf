@@ -9,6 +9,18 @@ resource "google_project_iam_member" "vm_fetcher_pubsub_publisher" {
   member  = "serviceAccount:${google_service_account.vm_fetcher_sa.email}"
 }
 
+resource "google_bigquery_dataset_iam_member" "vm_fetcher_data_raw_writer" {
+  dataset_id = "raw"
+  role       = "roles/bigquery.dataEditor"
+  member     = "serviceAccount:${google_service_account.vm_fetcher_sa.email}"
+}
+
+resource "google_project_iam_member" "vm_fetcher_bq_jobuser" {
+  project = var.project_id
+  role    = "roles/bigquery.jobUser"
+  member  = "serviceAccount:${google_service_account.vm_fetcher_sa.email}"
+}
+
 data "google_project" "current" {
   project_id = var.project_id
 }

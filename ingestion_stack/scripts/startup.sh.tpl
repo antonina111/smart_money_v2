@@ -22,10 +22,14 @@ adduser --system --group --home /opt/kline kline || true
 install -d -o kline -g kline -m 755 /opt/kline
 install -d -o kline -g kline -m 755 /var/log/kline
 sudo -u kline bash -lc 'touch /var/log/kline/kline.log'
+sudo -u kline bash -lc 'touch /var/log/kline/kline_backfill.log'
 
 # ===== DEPLOY APP CODE =====
 cat >/opt/kline/binance_kline_streamer.py <<'PYCODE'
 ${streamer_py}
+PYCODE
+cat >/opt/kline/binance_backfill.py <<'PYCODE'
+${backfill_py}
 PYCODE
 chown -R kline:kline /opt/kline
 
@@ -37,6 +41,8 @@ sudo -u kline bash -lc '
   python -m pip install --upgrade pip
   python -m pip install websockets
   python -m pip install google-cloud-pubsub
+  python -m pip install google-cloud-bigquery
+  python -m pip install requests
   # Sanity check: imports must succeed
   python - <<PY
 import websockets
@@ -44,6 +50,13 @@ print("websockets OK", websockets.__version__)
 
 from google.cloud import pubsub_v1
 print("google-cloud-pubsub OK")
+
+from google.cloud import bigquery
+print("google-cloud-bigquery OK")
+
+import requests
+print("requests OK", requests.__version__)
+
 PY
 '
 
@@ -60,8 +73,7 @@ Description=Kline Streamer (Python)
 After=network-online.target
 Wants=network-online.target
 # rate limiting belongs in [Unit]
-StartLimitInterval=60
-StartLimitBurst=10
+StartLimitIntervalSec=0
 
 [Service]
 Type=simple

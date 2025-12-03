@@ -30,3 +30,4 @@ SELECT
 FROM
   `mineral-brand-231612.raw.market_klines`
 WHERE JSON_VALUE(DATA, '$.i') IN ("1h", "2h")
+AND JSON_VALUE(attributes, '$.ingestion_type') = "websocket"
