@@ -77,7 +77,7 @@ resource "google_bigquery_data_transfer_config" "raw_to_curated" {
 
     write_disposition = "WRITE_TRUNCATE"
 
-    query = file("${path.module}/../app/raw_to_curated.sql")
+    query = file("${path.module}/../app/bq_scripts/raw_to_curated.sql")
   }
 }
 

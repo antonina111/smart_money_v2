@@ -1,6 +1,6 @@
 locals {
-  streamer_py = file("${path.module}/../app/binance_kline_streamer.py")
-  backfill_py = file("${path.module}/../app/binance_backfill.py")
+  streamer_py = file("${path.module}/../app/vm_scripts/binance_kline_streamer.py")
+  backfill_py = file("${path.module}/../app/vm_scripts/binance_backfill.py")
 }
 
 resource "google_compute_instance" "vm-fetcher-2-0" {
