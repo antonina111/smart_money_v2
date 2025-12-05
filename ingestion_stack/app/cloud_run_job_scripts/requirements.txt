@@ -1,0 +1,2 @@
+# ingestion_stack/app/cloud_run_job_scripts/requirements.txt
+# no additional dependencies needed for hello world
