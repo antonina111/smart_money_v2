@@ -81,3 +81,17 @@ resource "google_bigquery_data_transfer_config" "raw_to_curated" {
   }
 }
 
+# view
+
+resource "google_bigquery_table" "missing_klines" {
+  dataset_id = google_bigquery_dataset.curated.dataset_id
+  table_id   = "vw_missing_klines"
+
+  deletion_protection = false
+
+  view {
+    query          = file("${path.module}/../app/bq_scripts/vw_missing_klines.sql")
+    use_legacy_sql = false
+  }
+}
+
