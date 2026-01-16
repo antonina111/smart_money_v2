@@ -95,3 +95,14 @@ resource "google_bigquery_table" "missing_klines" {
   }
 }
 
+resource "google_bigquery_table" "klines_clean" {
+  dataset_id = google_bigquery_dataset.curated.dataset_id
+  table_id   = "vw_market_klines_clean"
+
+  deletion_protection = false
+
+  view {
+    query          = file("${path.module}/../app/bq_scripts/vw_market_klines_clean.sql")
+    use_legacy_sql = false
+  }
+}
