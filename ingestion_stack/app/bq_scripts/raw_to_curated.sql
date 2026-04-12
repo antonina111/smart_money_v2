@@ -21,7 +21,7 @@ SELECT
   CAST(JSON_VALUE(DATA, '$.L') AS INT64) AS last_trade_id,
   CAST(JSON_VALUE(DATA, '$.o') AS FLOAT64) AS open_price,
   CAST(JSON_VALUE(DATA, '$.c') AS FLOAT64) AS close_price,
-  CAST(JSON_VALUE(DATA, '$.h') AS FLOAT64)AS high_price,
+  CAST(JSON_VALUE(DATA, '$.h') AS FLOAT64) AS high_price,
   CAST(JSON_VALUE(DATA, '$.l') AS FLOAT64) AS low_price,
   CAST(JSON_VALUE(DATA, '$.v') AS FLOAT64) AS base_asset_volume,
   CAST(JSON_VALUE(DATA, '$.n') AS INT64) AS number_of_trades,

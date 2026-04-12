@@ -1,0 +1,72 @@
+RAW
+raw.market_klines
+- data
+- attributes
+- message_id
+- publish_time
+- subscription_name
+
+        │
+        │ parsing JSON / casting / filtering / standardization
+        ▼
+
+CURATED
+curated.market_klines
+- message_id
+- publish_time
+- ingestion_type
+- source_type
+- source_name
+- kline_start_time
+- kline_close_time
+- symbol
+- timeframe
+- first_trade_id
+- last_trade_id
+- open_price
+- close_price
+- high_price
+- low_price
+- base_asset_volume
+- number_of_trades
+- is_kline_closed
+- quote_asset_volume
+- taker_buy_base_asset_volume
+- taker_buy_quote_asset_volume
+- ignore_value
+
+        │
+        │ window calculations / anomaly detection / smart money rules
+        ▼
+
+ANALYTICS
+analytics.fact_smart_money_signals
+- kline_id
+- message_id
+- publish_time
+- kline_start_time
+- kline_close_time
+- symbol
+- timeframe
+- open_price
+- close_price
+- high_price
+- low_price
+- quote_asset_volume
+- base_asset_volume
+- number_of_trades
+- taker_buy_base_asset_volume
+- taker_buy_quote_asset_volume
+- candle_direction
+- price_change_pct
+- price_range_pct
+- buy_pressure_ratio
+- avg_quote_asset_volume_24
+- avg_number_of_trades_24
+- volume_anomaly_ratio
+- trades_anomaly_ratio
+- smart_money_signal
+- smart_money_score
+- is_volume_anomaly
+- is_trade_anomaly
+- is_buy_pressure_high
