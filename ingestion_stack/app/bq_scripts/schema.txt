@@ -70,3 +70,7 @@ analytics.fact_smart_money_signals
 - is_volume_anomaly
 - is_trade_anomaly
 - is_buy_pressure_high
+
+Warstwa RAW przechowuje surowe komunikaty rynkowe pobierane z Pub/Sub.
+Warstwa CURATED zawiera dane oczyszczone, ustandaryzowane i przekształcone do postaci analitycznej.
+Warstwa ANALYTICS udostępnia gotowe wskaźniki i sygnały analityczne, w tym anomalie wolumenu, presję zakupową oraz uproszczone sygnały smart money.
